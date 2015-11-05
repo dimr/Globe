@@ -4,6 +4,7 @@ import org.json.simple.parser.ParseException;
 import processing.core.PApplet;
 import org.json.simple.parser.JSONParser;
 import toxi.geom.Polygon2D;
+import toxi.geom.Vec2D;
 import toxi.processing.ToxiclibsSupport;
 
 import java.io.FileNotFoundException;
@@ -26,7 +27,7 @@ public class Main extends PApplet {
         toxi = new ToxiclibsSupport(this);
         Object in = null;
         try {
-            in = new JSONParser().parse(new FileReader(geoJSON));
+            in = new JSONParser().parse(new FileReader(t));
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (FileNotFoundException r) {
@@ -41,21 +42,30 @@ public class Main extends PApplet {
         for (int i = 0; i < features.size(); i++) {
             JSONObject pr = (JSONObject) features.get(i);
             JSONObject properties = (JSONObject) pr.get("properties");
-            String name = (String) properties.get("NAME");
-            String condinent = (String) properties.get("REGION_UN");
+            String name = (String) properties.get("name");
+            String condinent = (String) properties.get("continent");
             String fips = (String) properties.get("FIPS_10_");
             JSONObject t = ((JSONObject) pr.get("geometry"));
             String type = t.get("type").toString();
             JSONArray ar = (JSONArray) t.get("coordinates");
-          //  if (condinent.equals("Europe")) {
-//                for (int j = 0; j < ar.size(); j++) {
-//
-//                    System.out.println(name + "," + fips + " " + type + " " + ar.size() + " "+ar.get(j));
-//                }
+            if (name.equals("Greece")) {
+                for (int j = 0; j < ar.size(); j++) {
+                    JSONArray last=(JSONArray)ar.get(j);
+                    for (int k = 0; k < last.size(); k++) {
+                        JSONArray finalCoordinates = (JSONArray)last.get(k);
+                        double x= ((Double)finalCoordinates.get(0)).doubleValue();
+                        double y=  ((Double)finalCoordinates.get(1)).doubleValue();
+                        float latitutde=(float)x;
+                        float longitude=(float)y;
+                        System.out.println(new Vec2D(latitutde,longitude));
+                    }
 
-                countries.add(new Country(this, name, fips, ar.size(), ar));
+
+                }
+
+
                 count++;
-           // }
+           }
         }
         // System.out.println(count);
 //        System.out.println(((JSONObject)features.get(11)).get("NAME"));
@@ -69,13 +79,13 @@ public class Main extends PApplet {
 
     public void draw() {
         background(100);
-        stroke((float) .5);
-        for (Country c : countries) {
-            //  if (c.getName().equals("Russia"))
-            for (Polygon2D p : c.getPolygons()) {
-                toxi.polygon2D(p);
-            }
-        }
+//        stroke((float) .5);
+//        for (Country c : countries) {
+//            //  if (c.getName().equals("Russia"))
+//            for (Polygon2D p : c.getPolygons()) {
+//                toxi.polygon2D(p);
+//            }
+//        }
         pushStyle();
         fill(255,90);
         noStroke();
