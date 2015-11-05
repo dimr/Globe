@@ -23,7 +23,7 @@ public class Main extends PApplet {
     ArrayList<Country> countries;
 
     public void setup() {
-        size(displayWidth, displayHeight);
+        size(800, 536);
         toxi = new ToxiclibsSupport(this);
         Object in = null;
         try {
@@ -49,32 +49,10 @@ public class Main extends PApplet {
             JSONArray coordinates = (JSONArray) geometry.get("coordinates");
             String type = geometry.get("type").toString();
 
-            if (name.equals("Poland"))
-                countries.add(new Country(this, name, type,coordinates));
-//            for (int j = 0; j < coordinates.size(); j++) {
-//                if (name.equals("Greece")) {
-//                    int finalOneArraySize = ((JSONArray) coordinates.get(j)).size();
-//                    JSONArray finalOneArray = (JSONArray) coordinates.get(j);
-            //finalOneArraySize: contains each array that represents one polygon
-//                    for (int k = 0; k < finalOneArraySize; k++) {
-//                        int finalArrayToPolygonSize = ((JSONArray)finalOneArray.get(k)).size();
-//                        JSONArray finalArrayToPolygon = (JSONArray)finalOneArray.get(k);
-//                        System.out.println(name + " " + finalArrayToPolygon+" "+finalOneArray.get(k));
-//                        for (int l = 0; l < finalArrayToPolygonSize; l++) {
-//                            System.out.println(((JSONArray)finalArrayToPolygon.get(l)).get(0));
-//                        }
-//                    }
-//                }
-//            }
+            if (!name.equals("Antarctica") && !name.equals("Fr. S. Antarctic Lands") && !name.equals("Greenland"))
+                countries.add(new Country(this, name, type, coordinates));
+
         }
-
-        // System.out.println(count);
-//        System.out.println(((JSONObject)features.get(11)).get("NAME"));
-//        System.out.println(((JSONObject) features.get(11)).get("geometry"));
-//        System.out.println(countries.size());
-//        System.out.println(countries.get(30).getName() + " ");
-
-        System.out.println(countries.size());
     }
 
 
@@ -82,16 +60,16 @@ public class Main extends PApplet {
         background(100);
         stroke((float) .5);
         for (Country c : countries) {
-            //  if (c.getName().equals("Russia"))
             for (Polygon2D p : c.getPolygons()) {
                 toxi.polygon2D(p);
             }
         }
-        pushStyle();
-        fill(255, 90);
-        noStroke();
-        ellipse(frameCount % width, height / 2, 40, 40);
-        popStyle();
+
+//        pushStyle();
+//        fill(255, 90);
+//        noStroke();
+//        ellipse(frameCount % width, height / 2, 200, 200);
+//        popStyle();
 
     }
 
