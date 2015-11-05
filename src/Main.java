@@ -45,28 +45,27 @@ public class Main extends PApplet {
             String name = (String) properties.get("name");
             String condinent = (String) properties.get("continent");
             String fips = (String) properties.get("FIPS_10_");
-            JSONObject t = ((JSONObject) pr.get("geometry"));
-            String type = t.get("type").toString();
-            JSONArray ar = (JSONArray) t.get("coordinates");
-            if (name.equals("Greece")) {
-                for (int j = 0; j < ar.size(); j++) {
-                    JSONArray last=(JSONArray)ar.get(j);
-                    for (int k = 0; k < last.size(); k++) {
-                        JSONArray finalCoordinates = (JSONArray)last.get(k);
-                        double x= ((Double)finalCoordinates.get(0)).doubleValue();
-                        double y=  ((Double)finalCoordinates.get(1)).doubleValue();
-                        float latitutde=(float)x;
-                        float longitude=(float)y;
-                        System.out.println(new Vec2D(latitutde,longitude));
-                    }
-
-
-                }
-
-
-                count++;
-           }
+            JSONObject geometry = ((JSONObject) pr.get("geometry"));
+            JSONArray coordinates = (JSONArray) geometry.get("coordinates");
+          //  if (name.equals("Italy"))
+                new Country(this, name, coordinates);
+//            for (int j = 0; j < coordinates.size(); j++) {
+//                if (name.equals("Greece")) {
+//                    int finalOneArraySize = ((JSONArray) coordinates.get(j)).size();
+//                    JSONArray finalOneArray = (JSONArray) coordinates.get(j);
+            //finalOneArraySize: contains each array that represents one polygon
+//                    for (int k = 0; k < finalOneArraySize; k++) {
+//                        int finalArrayToPolygonSize = ((JSONArray)finalOneArray.get(k)).size();
+//                        JSONArray finalArrayToPolygon = (JSONArray)finalOneArray.get(k);
+//                        System.out.println(name + " " + finalArrayToPolygon+" "+finalOneArray.get(k));
+//                        for (int l = 0; l < finalArrayToPolygonSize; l++) {
+//                            System.out.println(((JSONArray)finalArrayToPolygon.get(l)).get(0));
+//                        }
+//                    }
+//                }
+//            }
         }
+
         // System.out.println(count);
 //        System.out.println(((JSONObject)features.get(11)).get("NAME"));
 //        System.out.println(((JSONObject) features.get(11)).get("geometry"));
@@ -87,7 +86,7 @@ public class Main extends PApplet {
 //            }
 //        }
         pushStyle();
-        fill(255,90);
+        fill(255, 90);
         noStroke();
         ellipse(frameCount % width, height / 2, 40, 40);
         popStyle();

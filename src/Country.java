@@ -16,33 +16,40 @@ public class Country {
     private String fips;
     private int numberOfPolygons;
     private PApplet pa;
+    private Polygon2D poly;
 
-    public Country(PApplet pa, String name, String fips, int numberOfPolygons, JSONArray data) {
+    public Country(PApplet pa, String name, JSONArray coordinates) {
         this.pa = pa;
         this.name = name;
-        this.fips = fips;
         this.numberOfPolygons = numberOfPolygons;
-        this.polygons = new ArrayList<>(this.numberOfPolygons);
-        for (int i = 0; i < data.size(); i++) {
-            Polygon2D poly = new Polygon2D();
-            JSONArray t = (JSONArray) data.get(i);
-            int size = ((JSONArray) t.get(0)).size();
-            //System.out.println( size+" " +t +" ");
-
-            for (int j = 0; j < size; j++) {
-                Object temp = ((JSONArray) t.get(0)).get(j);
-//                JSONArray temp2 =(JSONArray)t.get(j);
-//                System.out.println(temp2.get(0)+" "+temp2.get(1));
-                JSONArray f = (JSONArray) temp;
-                Double p1 = (double) f.get(0);
-                Double p2 = (double) f.get(1);
-
-                poly.add(toApplicationDimension(new Vec2D(p1.floatValue(), p2.floatValue())));
+        this.polygons = new ArrayList<>();
+        for (int j = 0; j < coordinates.size(); j++) {
+            //   if (name.equals("Greece")) {
+            int finalOneArraySize = ((JSONArray) coordinates.get(j)).size();
+            JSONArray finalOneArray = (JSONArray) coordinates.get(j);
+            //finalOneArraySize: contains each array that represents one polygon
+            for (int k = 0; k < finalOneArraySize; k++) {
+                int finalArrayToPolygonSize = ((JSONArray) finalOneArray.get(k)).size();
+                JSONArray finalArrayToPolygon = (JSONArray) finalOneArray.get(k);
+                System.out.println(name + " " + finalArrayToPolygon + " " + finalOneArray.get(k));
+                poly = new Polygon2D();
+                for (int l = 0; l < finalArrayToPolygonSize; l++) {
+                    JSONArray coord = (JSONArray) finalArrayToPolygon.get(l);
+                    double lon = ((Double) coord.get(0)).doubleValue();
+                    double lat = ((Double) coord.get(1)).doubleValue();
+                    float f_lon = (float) lon;
+                    float f_lat = (float) lat;
+                    Vec2D coordinate = new Vec2D(f_lon, f_lat);
+                    poly.add(coordinate);
+                    //double lon = ((Double) finalArrayToPolygon.get(l).).doubleValue();
+                    //      }
+                }
+                polygons.add(poly);
             }
-
-            polygons.add(poly);
-
         }
+
+        System.out.println(polygons.size());
+
 
     } //CONSTRUCTOR
 
@@ -59,7 +66,7 @@ public class Country {
         float x = this.pa.width * (v.x() - (-180)) / (180 - (-180));
         float y = (this.pa.height - this.pa.height * (v.y() - (-90)) / (90 - (-90)));
         result.set(x, y);
-        Vec3D vv= new Vec3D(x,y,0).toCartesian();
+        Vec3D vv = new Vec3D(x, y, 0).toCartesian();
         return result;
 
     }
