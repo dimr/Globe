@@ -18,7 +18,7 @@ public class Country {
     private PApplet pa;
     private Polygon2D poly;
 
-    public Country(PApplet pa, String name, JSONArray coordinates) {
+    public Country(PApplet pa, String name, String type, JSONArray coordinates) {
         this.pa = pa;
         this.name = name;
         this.numberOfPolygons = numberOfPolygons;
@@ -31,24 +31,37 @@ public class Country {
             for (int k = 0; k < finalOneArraySize; k++) {
                 int finalArrayToPolygonSize = ((JSONArray) finalOneArray.get(k)).size();
                 JSONArray finalArrayToPolygon = (JSONArray) finalOneArray.get(k);
-                System.out.println(name + " " + finalArrayToPolygon + " " + finalOneArray.get(k));
-                poly = new Polygon2D();
-                for (int l = 0; l < finalArrayToPolygonSize; l++) {
-                    JSONArray coord = (JSONArray) finalArrayToPolygon.get(l);
-                    double lon = ((Double) coord.get(0)).doubleValue();
-                    double lat = ((Double) coord.get(1)).doubleValue();
+                if (type.equals("Polygon")) {
+                    poly = new Polygon2D();
+                    // System.out.println("POLYGON");
+                    double lon = ((Double) finalArrayToPolygon.get(0)).doubleValue();
+                    double lat = ((Double) finalArrayToPolygon.get(1)).doubleValue();
                     float f_lon = (float) lon;
                     float f_lat = (float) lat;
-                    Vec2D coordinate = new Vec2D(f_lon, f_lat);
-                    poly.add(coordinate);
-                    //double lon = ((Double) finalArrayToPolygon.get(l).).doubleValue();
-                    //      }
+                    poly.add(toApplicationDimension(new Vec2D(f_lon, f_lat)));
+                    polygons.add(poly);
+                   // System.out.println(poly);
+                } else if (type.equals("MultiPolygon")) {
+                    poly = new Polygon2D();
+                    //  System.out.println("MULTIPOLYGON");
+                    for (int l = 0; l < finalArrayToPolygonSize; l++) {
+                        //   System.out.println(finalArrayToPolygon.get(l).getClass().getCanonicalName());
+                        JSONArray coord = (JSONArray) finalArrayToPolygon.get(l);
+                        double lon = ((Double) coord.get(0)).doubleValue();
+                        double lat = ((Double) coord.get(1)).doubleValue();
+                        float f_lon = (float) lon;
+                        float f_lat = (float) lat;
+                        poly.add(toApplicationDimension(new Vec2D(f_lon, f_lat)));
+                        //double lon = ((Double) finalArrayToPolygon.get(l).).doubleValue();
+                        //      }
+                        polygons.add(poly);
+                    }
                 }
-                polygons.add(poly);
+                // System.out.println(name + " " + finalArrayToPolygon + " " + finalOneArray.get(k));
             }
         }
 
-        System.out.println(polygons.size());
+        System.out.println("CONSTRUCTOR:"+polygons.size());
 
 
     } //CONSTRUCTOR

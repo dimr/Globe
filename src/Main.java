@@ -47,8 +47,10 @@ public class Main extends PApplet {
             String fips = (String) properties.get("FIPS_10_");
             JSONObject geometry = ((JSONObject) pr.get("geometry"));
             JSONArray coordinates = (JSONArray) geometry.get("coordinates");
-          //  if (name.equals("Italy"))
-                new Country(this, name, coordinates);
+            String type = geometry.get("type").toString();
+
+            if (name.equals("Poland"))
+                countries.add(new Country(this, name, type,coordinates));
 //            for (int j = 0; j < coordinates.size(); j++) {
 //                if (name.equals("Greece")) {
 //                    int finalOneArraySize = ((JSONArray) coordinates.get(j)).size();
@@ -72,19 +74,19 @@ public class Main extends PApplet {
 //        System.out.println(countries.size());
 //        System.out.println(countries.get(30).getName() + " ");
 
-
+        System.out.println(countries.size());
     }
 
 
     public void draw() {
         background(100);
-//        stroke((float) .5);
-//        for (Country c : countries) {
-//            //  if (c.getName().equals("Russia"))
-//            for (Polygon2D p : c.getPolygons()) {
-//                toxi.polygon2D(p);
-//            }
-//        }
+        stroke((float) .5);
+        for (Country c : countries) {
+            //  if (c.getName().equals("Russia"))
+            for (Polygon2D p : c.getPolygons()) {
+                toxi.polygon2D(p);
+            }
+        }
         pushStyle();
         fill(255, 90);
         noStroke();
