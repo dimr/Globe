@@ -7,6 +7,7 @@ import toxi.geom.Triangle2D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.geom.Rect;
+import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.geom.mesh2d.Voronoi;
 import toxi.processing.ToxiclibsSupport;
@@ -36,6 +37,7 @@ public class Country {
     private int resolution = 4;
     private List<Triangle2D> tr = new ArrayList<>();
     private List<List<Triangle2D>> outer = new ArrayList<>();
+    private ArrayList<Mesh3D> meshes = new ArrayList<>();
 
 
     public Country(PApplet pa, String name, String type, JSONArray coordinates) {
@@ -86,11 +88,20 @@ public class Country {
                 tr = tesselatePolygon(p, resolution);
                 outer.add(tr);
             } catch (NoSuchElementException e) {
-                System.out.println(name + " " + this.type);
+                //System.out.println(name + " " + this.type);
                 // e.printStackTrace();
             }
         }
+//        try {
+//            TriangleMesh m = buildSurfaceMesh(outer.get(0),200);
+//            System.out.println(m.getFaces().size());
+//        }catch(IndexOutOfBoundsException e){
+//           // System.out.println(name);
+//        }
 
+        for (List<Triangle2D> t : outer) {
+            meshes.add(buildSurfaceMesh(t, 200));
+        }
     } //CONSTRUCTOR
 
 
@@ -189,7 +200,7 @@ public class Country {
 
     public void drawTriangles() {
         this.pa.pushStyle();
-        this.pa.stroke((float).1);
+        this.pa.stroke((float) .1);
         this.pa.beginShape(PConstants.TRIANGLE);
 //        for (Triangle2D t : tr) {
 //            toxi.triangle(t);
@@ -201,6 +212,12 @@ public class Country {
         }
         this.pa.endShape();
         this.pa.popStyle();
+    }
+
+    public void drawMeshes() {
+        for (Mesh3D m : meshes) {
+            toxi.mesh(m, true, 20);
+        }
     }
 
     @Override

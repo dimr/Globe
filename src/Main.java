@@ -24,7 +24,7 @@ public class Main extends PApplet {
     ArrayList<Country> countries;
 
     public void setup() {
-        size(displayWidth, displayHeight);
+        size(displayWidth, displayHeight, P3D);
         toxi = new ToxiclibsSupport(this);
         Object in = null;
         try {
@@ -50,8 +50,8 @@ public class Main extends PApplet {
             JSONArray coordinates = (JSONArray) geometry.get("coordinates");
             String type = geometry.get("type").toString();
 
-            if (!name.equals("Antarctica") && !name.equals("Fr. S. Antarctic Lands") && !name.equals("Greenland")){
-            //   if (name.equals("Australia") || name.equals("Brazil") || name.equals("Russia") || name.equals("China") || name.equals("Morocco"))
+            if (!name.equals("Antarctica") && !name.equals("Fr. S. Antarctic Lands") && !name.equals("Greenland")) {
+                //   if (name.equals("Australia") || name.equals("Brazil") || name.equals("Russia") || name.equals("China") || name.equals("Morocco"))
                 countries.add(new Country(this, name, type, coordinates));
             }
 
@@ -62,22 +62,30 @@ public class Main extends PApplet {
     public void draw() {
         background(100);
         //stroke((float) .5);
-        noStroke();
-        noFill();
-        for (Country c : countries) {
-            for (Polygon2D p : c.getPolygons()) {
-                if (c.getType().equals("Polygon")){
-                    //GREEN
-                    fill(0,200,0);
-                }
-                else{
-                    //RED MULTIPOLYGON
-                    fill(200,0,0);
-                }
-               // toxi.polygon2D(p);
-            }
-            c.drawTriangles();
-        }
+//        noStroke();
+//        noFill();
+//        for (Country c : countries) {
+//            for (Polygon2D p : c.getPolygons()) {
+//                if (c.getType().equals("Polygon")){
+//                    //GREEN
+//                    fill(0,200,0);
+//                }
+//                else{
+//                    //RED MULTIPOLYGON
+//                    fill(200,0,0);
+//                }
+//               // toxi.polygon2D(p);
+//            }
+//            c.drawTriangles();
+//        }
+
+
+        translate(width / 2, height / 2, 0);
+        rotateX(mouseY * (float) 0.01);
+        rotateY(mouseX * (float) 0.01);
+        for (Country c : countries)
+          //  if (c.getName().equals("Russia") || c.getName().equals("Canada"))
+                c.drawMeshes();
 
 //        pushStyle();
 //        fill(255, 90);
