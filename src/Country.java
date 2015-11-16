@@ -28,13 +28,14 @@ public class Country {
     private PApplet pa;
     private Polygon2D poly;
     float DELAUNAY_SIZE = 10000;
+    private final float earthRadius=400;
     private float mapGeoLeft = -180;
     private float mapGeoRght = 180;
     private float mapGeoTop = 90;
     private float mapGeoBottom = 90;
     private TriangleMesh mesh;
     private ToxiclibsSupport toxi;
-    private int resolution = 4;
+    private int resolution = 10;
     private List<Triangle2D> tr = new ArrayList<>();
     private List<List<Triangle2D>> outer = new ArrayList<>();
     private ArrayList<Mesh3D> meshes = new ArrayList<>();
@@ -58,7 +59,7 @@ public class Country {
                 double lat = ((Double) point.get(1)).doubleValue();
                 float f_lon = (float) lon;
                 float f_lat = (float) lat;
-                poly.add(toApplicationDimension(new Vec2D(f_lon, f_lat)));
+                poly.add((new Vec2D(f_lon, f_lat)));
                 //  r=computeBounds(poly);
             }
             polygons.add(poly);
@@ -76,7 +77,7 @@ public class Country {
                         double lat = ((Double) coord.get(1)).doubleValue();
                         float f_lon = (float) lon;
                         float f_lat = (float) lat;
-                        poly.add(toApplicationDimension(new Vec2D(f_lon, f_lat)));
+                        poly.add(new Vec2D(f_lon, f_lat));
                     }
                 }
                 polygons.add(poly);
@@ -100,7 +101,7 @@ public class Country {
 //        }
 
         for (List<Triangle2D> t : outer) {
-            meshes.add(buildSurfaceMesh(t, 200));
+            meshes.add(buildSurfaceMesh(t, earthRadius));
         }
     } //CONSTRUCTOR
 
@@ -198,32 +199,36 @@ public class Country {
     }
 
 
-    public void drawTriangles() {
-        this.pa.pushStyle();
-        this.pa.stroke((float) .1);
-        this.pa.beginShape(PConstants.TRIANGLE);
-//        for (Triangle2D t : tr) {
-//            toxi.triangle(t);
+//    public void drawTriangles() {
+//        this.pa.pushStyle();
+//        this.pa.stroke((float) .1);
+//        this.pa.beginShape(PConstants.TRIANGLE);
+////        for (Triangle2D t : tr) {
+////            toxi.triangle(t);
+////        }
+//        for (List<Triangle2D> out : outer) {
+//            for (Triangle2D t : out) {
+//                toxi.triangle(t);
+//            }
 //        }
-        for (List<Triangle2D> out : outer) {
-            for (Triangle2D t : out) {
-                toxi.triangle(t);
-            }
-        }
-        this.pa.endShape();
-        this.pa.popStyle();
-    }
+//        this.pa.endShape();
+//        this.pa.popStyle();
+//    }
 
     public void drawMeshes() {
+        this.pa.pushStyle();
+        this.pa.fill(100,100,100);
+        this.pa.noStroke();
         for (Mesh3D m : meshes) {
-            toxi.mesh(m, true, 20);
+            toxi.mesh(m, true, 0);
         }
+        this.pa.popStyle();
     }
 
     public void drawPoints(){
         for (Polygon2D p:polygons){
             for (Vec2D v:p.vertices){
-                Vec3D v1=new Vec3D(200,this.pa.radians(v.x)+this.pa.PI,this.pa.radians(v.y)).toCartesian();
+                Vec3D v1=new Vec3D(earthRadius,this.pa.radians(v.x)+(float)Math.PI,this.pa.radians(v.y)).toCartesian();
                 this.pa.point(v1.x,v1.y,v1.z);
             }
         }
