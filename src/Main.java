@@ -83,9 +83,17 @@ public class Main extends PApplet {
         translate(width / 2, height / 2, 0);
         rotateX(mouseY * (float) 0.01);
         rotateY(mouseX * (float) 0.01);
+        pushStyle();
+//        noStroke();
+//        lights();
+        pushMatrix();
+        rotateY(radians(frameCount%360));
+        sphere(194);
+        popMatrix();
+        popStyle();
         for (Country c : countries)
-          //  if (c.getName().equals("Russia") || c.getName().equals("Canada"))
-                c.drawMeshes();
+           if (c.getName().equals("Russia"))
+                c.drawPoints();
 
 //        pushStyle();
 //        fill(255, 90);

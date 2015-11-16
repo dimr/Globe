@@ -220,6 +220,15 @@ public class Country {
         }
     }
 
+    public void drawPoints(){
+        for (Polygon2D p:polygons){
+            for (Vec2D v:p.vertices){
+                Vec3D v1=new Vec3D(200,this.pa.radians(v.x)+this.pa.PI,this.pa.radians(v.y)).toCartesian();
+                this.pa.point(v1.x,v1.y,v1.z);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "Country{" +
