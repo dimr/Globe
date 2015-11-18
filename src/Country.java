@@ -217,7 +217,7 @@ public class Country {
 
     public void drawMeshes() {
         this.pa.pushStyle();
-        this.pa.fill(100,100,100);
+        this.pa.fill(30);
         this.pa.noStroke();
         for (Mesh3D m : meshes) {
             toxi.mesh(m, true, 0);

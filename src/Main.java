@@ -3,6 +3,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import processing.core.PApplet;
 import org.json.simple.parser.JSONParser;
+import processing.core.PGraphics;
 import processing.core.PVector;
 import shapes3d.Ellipsoid;
 import shapes3d.Shape3D;
@@ -35,8 +36,14 @@ public class Main extends PApplet {
 
     Ellipsoid earth;
 
+    boolean showInfo = false;
+    PGraphics info;
+    int z = -2000;
+    float scaleFactor=1;
+    float scaleValue=1;
+
     public void setup() {
-        size(displayWidth, displayHeight, P3D);
+        size(displayWidth, displayHeight - 60, P3D);
         toxi = new ToxiclibsSupport(this);
         Object in = null;
         try {
@@ -68,16 +75,17 @@ public class Main extends PApplet {
             // }
 
         }
+
         athens = new Vec3D(400, radians((float) 23.73), radians((float) 37.98)).toCartesian();
         city = new Vec3D(400, radians((float) 6.12), radians((float) 49.62)).toCartesian();
         l = new Line3D(athens, city);
         points = new ArrayList<>();
         points = l.splitIntoSegments(points, 10, true);
-        System.out.println(points.size() + " " + l.getMidPoint());
 
 
         earth = new Ellipsoid(this, 16, 16);
-        earth.setTexture("./data/Clouds.png");
+        earth.setTexture("./data/world32k.jpg");
+        //earth.setTexture("./data/Clouds.png");
         earth.setRadius(398);
         earth.moveTo(new PVector(0, 0, 0));
         earth.strokeWeight(1.0f);
@@ -86,6 +94,8 @@ public class Main extends PApplet {
         earth.tag = "Earth";
         earth.drawMode(Shape3D.TEXTURE);
 
+
+        info = createGraphics(400, 200, P3D);
 
     }
 
@@ -110,29 +120,38 @@ public class Main extends PApplet {
 //            c.drawTriangles();
 //        }
 
-
-        translate(width / 2, height / 2, 0);
+        pushMatrix();
+        if (z > 0)
+            translate(width / 2, height / 2, 0);
+        else
+            translate(width / 2, height / 2, z);
+        z+=50;
         rotateX(mouseY * (float) 0.01);
-        rotateY(mouseX * (float) 0.01);
+        if (mouseX == 0 && mouseY == 0)
+            rotateX(radians(180));
+        rotateY(radians(-frameCount % 360));
         pushStyle();
         noStroke();
-       // lights();
+        lights();
 
-        fill(0);
-        // sphere(398);
+        fill(20, 49, 91);
+        sphere(398);
 
 
-        texturedEarth();
+        //texturedEarth();
+        pushMatrix();
+        scale(scaleFactor);
         popStyle();
         for (Country c : countries) {
             c.drawMeshes();
 
         }
+        popMatrix();
 
 
         pushStyle();
         stroke(255, 0, 0);
-        strokeWeight(10);
+        strokeWeight(5);
         point(athens.x(), athens.y(), athens.z());
         point(city.x(), city.y(), city.z());
 //        for (Vec3D v:points)
@@ -147,17 +166,32 @@ public class Main extends PApplet {
 //        noStroke();
 //        ellipse(frameCount % width, height / 2, 200, 200);
 //        popStyle();
-
+        noLights();
+        popMatrix();
 
         //EARTH TEXTURE
-
-
+        if (showInfo) {
+            info.beginDraw();
+            info.background(100);
+            info.noLights();
+            info.pushMatrix();
+            info.translate(info.width / 2, info.height / 2);
+            info.rotate(radians(frameCount % 360));
+            info.noStroke();
+            info.smooth();
+            info.rectMode(CENTER);
+            info.rect(0, 0, 40, 40);
+            info.popMatrix();
+            info.text(scaleFactor, 30, 100);
+            info.endDraw();
+            image(info, width - info.width, height - info.height);
+        }
     }
 
     public void texturedEarth() {
         pushStyle();
         // Change the rotations before drawing
-       // earth.rotateBy(0, radians(-1.8f), 0);
+        // earth.rotateBy(0, radians(-1.8f), 0);
         pushMatrix();
         rotateX(radians(180));
         rotateY(radians(180));
@@ -167,6 +201,23 @@ public class Main extends PApplet {
 
         // popMatrix();
         popStyle();
+    }
+
+    public void keyPressed() {
+        if (keyCode == ' ') {
+            showInfo = !showInfo;
+        }
+        else if(keyCode==UP){
+            scaleFactor+=(float).05;
+        }else if (keyCode==DOWN){
+            scaleFactor-=(float).05;
+        }
+
+    }
+
+
+    public Vec3D to(Vec2D v, int radius) {
+        return new Vec3D(radius, v.x, v.y).toSpherical();
     }
 
     public static void main(String[] args) {
