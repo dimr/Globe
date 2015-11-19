@@ -2,11 +2,7 @@ import org.json.simple.JSONArray;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
-import toxi.geom.Polygon2D;
-import toxi.geom.Triangle2D;
-import toxi.geom.Vec2D;
-import toxi.geom.Vec3D;
-import toxi.geom.Rect;
+import toxi.geom.*;
 import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.geom.mesh2d.Voronoi;
@@ -39,6 +35,19 @@ public class Country {
     private List<Triangle2D> tr = new ArrayList<>();
     private List<List<Triangle2D>> outer = new ArrayList<>();
     private ArrayList<Mesh3D> meshes = new ArrayList<>();
+    private Capital capital;
+
+    public Capital getCapital() {
+        return capital;
+    }
+
+    public void setCapital(Capital capital) {
+        this.capital = capital;
+    }
+
+    public void findCapital(String name){
+
+    }
 
 
     public Country(PApplet pa, String name, String type, JSONArray coordinates) {
@@ -89,7 +98,7 @@ public class Country {
                 tr = tesselatePolygon(p, resolution);
                 outer.add(tr);
             } catch (NoSuchElementException e) {
-                //System.out.println(name + " " + this.type);
+                System.out.println(name + " " + this.type);
                 // e.printStackTrace();
             }
         }
@@ -225,6 +234,14 @@ public class Country {
         this.pa.popStyle();
     }
 
+    public void drawCapital(){
+        this.pa.pushStyle();
+        this.pa.strokeWeight(4);
+        this.pa.stroke(255,0,0);
+        this.toxi.point(this.getCapital().toSpherical());
+        this.pa.popStyle();
+    }
+
     public void drawPoints(){
         for (Polygon2D p:polygons){
             for (Vec2D v:p.vertices){
@@ -234,6 +251,8 @@ public class Country {
         }
     }
 
+
+
     @Override
     public String toString() {
         return "Country{" +
@@ -241,6 +260,7 @@ public class Country {
                 ", name='" + name + '\'' +
                 ", fips='" + fips + '\'' +
                 ", numberOfPolygons=" + numberOfPolygons +
+                ", Capital: "+getCapital()+
                 '}';
     }
 }

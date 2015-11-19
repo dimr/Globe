@@ -7,4 +7,4 @@ rm out/production/Refugees/*;
 echo "Deleting .class files"
 fi
 
-javac -d out/production/Refugees/ src/*.java ; optirun java Main
+javac -d out/production/Refugees/ src/*.java ; optirun java -ea Main
