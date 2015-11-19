@@ -90,7 +90,7 @@ public class Main extends PApplet {
                 capitalName = temp[0];
                 v.set(Float.parseFloat(temp[3]), Float.parseFloat(temp[2]));
             }
-            Capital c = new Capital(this);
+            Capital c = new Capital();
             c.setName(capitalName);
             c.setCountry(countryName);
             c.setCoordinate(v);

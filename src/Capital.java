@@ -9,7 +9,7 @@ public class Capital {
     private String country;
     private String name;
     private Vec2D coordinate;
-    private PApplet pa;
+
 
     @Override
     public String toString() {
@@ -20,8 +20,8 @@ public class Capital {
                 '}';
     }
 
-    public Capital(PApplet pa) {
-        this.pa=pa;
+    public Capital() {
+
     }
 
     public String getCountry() {
@@ -49,10 +49,10 @@ public class Capital {
     }
 
     public Vec3D toSpherical(){
-        return new Vec3D(400,this.pa.radians(this.getCoordinate().x),this.pa.radians(this.getCoordinate().y)).toCartesian();
+        return new Vec3D(400,(float)Math.toRadians(this.getCoordinate().x),(float)Math.toRadians(this.getCoordinate().y)).toCartesian();
     }
 
     public Vec3D toSpherical(float radius){
-        return new Vec3D(radius,(float)this.pa.radians(this.getCoordinate().x),(float)this.pa.radians(this.getCoordinate().y)).toCartesian();
+        return new Vec3D(radius,(float)Math.toRadians(this.getCoordinate().x),(float)Math.toRadians(this.getCoordinate().y)).toCartesian();
     }
 }
