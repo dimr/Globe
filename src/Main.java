@@ -1,6 +1,7 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import peasy.PeasyCam;
 import processing.core.PApplet;
 import org.json.simple.parser.JSONParser;
 import processing.core.PGraphics;
@@ -41,6 +42,7 @@ public class Main extends PApplet implements SketchConstants{
     int z = -2000;
     float scaleFactor = 1;
     float scaleValue = 1;
+    PeasyCam peasy;
 
     public void setup() {
         size(displayWidth, displayHeight - 60, P3D);
@@ -112,11 +114,11 @@ public class Main extends PApplet implements SketchConstants{
 
        // athens = new Vec3D(400, radians((float) 23.73), radians((float) 37.98)).toCartesian();
         for (Country c:countries){
-            if(c.getCapital().getName().equals("Washington")){
+            if(c.getCapital().getName().equals("Athens")){
                 System.out.println(c);
 //                System.out.println(c.getCapital().toSpherical()+" "+c.getCapital().toSpherical());
                 city=c.getCapital();
-            }else if (c.getCapital().getName().equals("Athens")){
+            }else if (c.getCapital().getName().equals("Santiago")){
                 city2=c.getCapital();
             }
         }
@@ -142,6 +144,8 @@ public class Main extends PApplet implements SketchConstants{
 
 
         info = createGraphics(400, 200, P3D);
+
+        peasy = new PeasyCam(this,width/2,height/2,0,500);
 
     }
 
@@ -173,16 +177,16 @@ public class Main extends PApplet implements SketchConstants{
         else
             translate(width / 2, height / 2, z);
         z+=50;
-        rotateX(mouseY * (float) 0.01);
-        if (mouseX == 0 && mouseY == 0)
+//        rotateX(mouseY * (float) 0.01);
+//        if (mouseX == 0 && mouseY == 0)
             rotateX(radians(180));
-        rotateY(radians(-frameCount % 360));
+//        rotateY(radians(-frameCount % 360));
         pushStyle();
         noStroke();
         lights();
 
         fill(20, 49, 91);
-        //sphere(EARTH_RADIUS*(float).995);
+       //sphere(EARTH_RADIUS*(float).995);
 
 
         //texturedEarth();
@@ -206,17 +210,29 @@ public class Main extends PApplet implements SketchConstants{
 //        toxi.point(v);
         //toxi.line(new Line3D(new Vec3D(0,0,0),athens));
 //        toxi.point(l.getMidPoint());
-        toxi.line(new Line3D(city.toSpherical(), city.toSpherical(250)));
-        toxi.line(new Line3D(city2.toSpherical(), city2.toSpherical(250)));
-      //  40.42	-3.7
+//        toxi.line(new Line3D(city2.toSpherical(), city2.toSpherical(250)));
+//
+       toxi.line(new Line3D(city.toSpherical(), city2.toSpherical()));
+        //toxi.line(new Vec3D(),city.toSpherical().scaleSelf(map(mouseX,0,width,1,3)));
+     //   toxi.line(city.toSpherical(), city.toSpherical().scale(map(mouseX,0,width,2,(float)2.5)).sub(city.toSpherical()));
+       // toxi.line(city2.toSpherical(), city2.toSpherical().scale(map(mouseX,0,width,2,(float)2.7)).sub(city2.toSpherical()));
 
+
+        for(Country c:countries) {
+            pushMatrix();
+            translate(c.getCapital().toSpherical().x,c.getCapital().toSpherical().y,c.getCapital().toSpherical().z);
+            toxi.line(new Vec3D(0,0,0),new Vec3D(10,10,10));
+            popMatrix();
+        }
         popStyle();
 //        pushStyle();
 //        fill(255, 90);
 //        noStroke();
 //        ellipse(frameCount % width, height / 2, 200, 200);
 //        popStyle();
+
         noLights();
+
         popMatrix();
 
         //EARTH TEXTURE
