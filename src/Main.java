@@ -21,15 +21,15 @@ import java.util.List;
 /**
  * Created by dimitris on 11/4/15.
  */
-public class Main extends PApplet {
+public class Main extends PApplet implements SketchConstants{
 
     String t = "./data/countries.geojson";
     String[] capitalsFile = loadStrings("./data/capitalsNew.csv");
     ToxiclibsSupport toxi;
     ArrayList<Country> countries;
     ArrayList<Capital> capitals;
-    private Vec3D  city;
-    private Capital athens;
+    private Capital city;
+    private Capital city2;
     Line3D l;
     List<Vec3D> points;
     float test;
@@ -115,14 +115,16 @@ public class Main extends PApplet {
             if(c.getCapital().getName().equals("Washington")){
                 System.out.println(c);
 //                System.out.println(c.getCapital().toSpherical()+" "+c.getCapital().toSpherical());
-                athens=c.getCapital();
+                city=c.getCapital();
+            }else if (c.getCapital().getName().equals("Athens")){
+                city2=c.getCapital();
             }
         }
 
 
 
-        city = new Vec3D(400, radians((float) -3.7), radians((float) 40.42)).toCartesian();
-        l = new Line3D(athens.toSpherical(), city);
+
+        l = new Line3D(city.toSpherical(), city.toSpherical(250));
         points = new ArrayList<>();
 //        points = l.splitIntoSegments(points, 10, true);
 
@@ -130,7 +132,7 @@ public class Main extends PApplet {
         earth = new Ellipsoid(this, 16, 16);
         earth.setTexture("./data/world32k.jpg");
         //earth.setTexture("./data/Clouds.png");
-        earth.setRadius(398);
+        earth.setRadius(EARTH_RADIUS-2);
         earth.moveTo(new PVector(0, 0, 0));
         earth.strokeWeight(1.0f);
         earth.stroke(color(255, 255, 0));
@@ -180,7 +182,7 @@ public class Main extends PApplet {
         lights();
 
         fill(20, 49, 91);
-        sphere(398);
+        //sphere(EARTH_RADIUS*(float).995);
 
 
         //texturedEarth();
@@ -189,7 +191,7 @@ public class Main extends PApplet {
         popStyle();
         for (Country c : countries) {
             c.drawMeshes();
-            c.drawCapital();
+           // c.drawCapital();
 
         }
         popMatrix();
@@ -199,15 +201,15 @@ public class Main extends PApplet {
         stroke(255, 0, 0);
         strokeWeight(5);
 //        point(athens.x(), athens.y(), athens.z());
-        point(city.x(), city.y(), city.z());
+       // point(city.x(), city.y(), city.z());
 //        for (Vec3D v:points)
 //        toxi.point(v);
         //toxi.line(new Line3D(new Vec3D(0,0,0),athens));
 //        toxi.point(l.getMidPoint());
-        toxi.line(new Line3D(athens.toSpherical(), athens.toSpherical(600)));
+        toxi.line(new Line3D(city.toSpherical(), city.toSpherical(250)));
+        toxi.line(new Line3D(city2.toSpherical(), city2.toSpherical(250)));
       //  40.42	-3.7
 
-        toxi.line(new Line3D(city, new Vec3D(600, radians((float) -3.7), radians((float)40.42)).toCartesian()));
         popStyle();
 //        pushStyle();
 //        fill(255, 90);

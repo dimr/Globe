@@ -5,7 +5,7 @@ import toxi.geom.Vec3D;
 /**
  * Created by dimitris on 11/19/15.
  */
-public class Capital {
+public class Capital implements SketchConstants{
     private String country;
     private String name;
     private Vec2D coordinate;
@@ -49,7 +49,7 @@ public class Capital {
     }
 
     public Vec3D toSpherical(){
-        return new Vec3D(400,(float)Math.toRadians(this.getCoordinate().x),(float)Math.toRadians(this.getCoordinate().y)).toCartesian();
+        return new Vec3D(EARTH_RADIUS,(float)Math.toRadians(this.getCoordinate().x),(float)Math.toRadians(this.getCoordinate().y)).toCartesian();
     }
 
     public Vec3D toSpherical(float radius){

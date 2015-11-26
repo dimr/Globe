@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 /**
  * Created by dimitris on 11/4/15.
  */
-public class Country {
+public class Country implements SketchConstants{
     private ArrayList<Polygon2D> polygons;
     private String name;
     private String fips;
@@ -24,7 +24,6 @@ public class Country {
     private PApplet pa;
     private Polygon2D poly;
     float DELAUNAY_SIZE = 10000;
-    private final float earthRadius=400;
     private float mapGeoLeft = -180;
     private float mapGeoRght = 180;
     private float mapGeoTop = 90;
@@ -110,7 +109,7 @@ public class Country {
 //        }
 
         for (List<Triangle2D> t : outer) {
-            meshes.add(buildSurfaceMesh(t, earthRadius));
+            meshes.add(buildSurfaceMesh(t, EARTH_RADIUS));
         }
     } //CONSTRUCTOR
 
@@ -245,7 +244,7 @@ public class Country {
     public void drawPoints(){
         for (Polygon2D p:polygons){
             for (Vec2D v:p.vertices){
-                Vec3D v1=new Vec3D(earthRadius,this.pa.radians(v.x)+(float)Math.PI,this.pa.radians(v.y)).toCartesian();
+                Vec3D v1=new Vec3D(EARTH_RADIUS,this.pa.radians(v.x)+(float)Math.PI,this.pa.radians(v.y)).toCartesian();
                 this.pa.point(v1.x,v1.y,v1.z);
             }
         }
