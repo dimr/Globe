@@ -1,6 +1,6 @@
 # Globe
 Processing sketch for visualizing lat/long data on sphere
-Sketch that creates a sphere from 2D country boundary [data](https://github.com/dimr/geo-boundaries-world-110m)
+Sketch that creates a sphere from 2D geo boundary JSON [data](https://github.com/dimr/geo-boundaries-world-110m)
 
 Screenshot 1: Initial with visible triangulation
 ![alt tag](https://github.com/dimr/Globe/blob/master/pics/sphere-triangulated.png)
